@@ -22,8 +22,8 @@
 //       resolvers: [ElementPlusResolver()],
 //     }),
 //   ],
-//   base: process.env.NODE_ENV === 'production' ? '/DFSC/' : '/',
-//   // base:'./',
+//   base: process.env.NODE_ENV === 'production' ? '/web_dfsc222/' : '/',
+//   // base:'/',
 //   resolve: {
 //     alias: {
 //       '@': fileURLToPath(new URL('./src', import.meta.url))
@@ -71,26 +71,152 @@
 
 
 
+// import { fileURLToPath, URL } from 'node:url'
+// import { defineConfig } from 'vite'
+// import vue from '@vitejs/plugin-vue'  // 关键点：确保这一行存在
+// import vueDevTools from 'vite-plugin-vue-devtools'
+// import AutoImport from 'unplugin-auto-import/vite'
+// import Components from 'unplugin-vue-components/vite'
+// import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+
+// export default defineConfig({
+//   plugins: [
+//     vue(),  // 确保这里调用了 vue() 插件
+//     vueDevTools(),
+//     AutoImport({
+//       resolvers: [ElementPlusResolver()],
+//     }),
+//     Components({
+//       resolvers: [ElementPlusResolver()],
+//     }),
+//   ],
+//   // base: process.env.NODE_ENV === 'production' ? '/web_dfsc222/' : '/',
+//   // base: './',
+//   base: '/web_dfsc222/',
+//   build: {
+//     rollupOptions: {
+//       output: {
+//         // 使用绝对路径
+//         chunkFileNames: 'web_dfsc222/assets/[name]-[hash].js',
+//         assetFileNames: 'web_dfsc222/assets/[name]-[hash][extname]',
+//         // 避免中文文件名
+//         sanitizeFileName: (name) => name.replace(/[\u4e00-\u9fa5]/g, '')
+//       }
+//     }
+//   },
+//   resolve: {
+//     alias: {
+//       '@': fileURLToPath(new URL('./src', import.meta.url))
+//     }
+//   }
+// })
+// import { fileURLToPath, URL } from 'node:url';
+// import { defineConfig } from 'vite';
+// import vue from '@vitejs/plugin-vue';
+// import vueDevTools from 'vite-plugin-vue-devtools';
+// import AutoImport from 'unplugin-auto-import/vite';
+// import Components from 'unplugin-vue-components/vite';
+// import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
+
+// export default defineConfig({
+//   plugins: [
+//     vue(),  // Vue 插件
+//     vueDevTools(),  // Vue DevTools 插件
+//     AutoImport({
+//       resolvers: [ElementPlusResolver()],  // 自动导入 Element Plus 组件
+//     }),
+//     Components({
+//       resolvers: [ElementPlusResolver()],  // 自动注册 Element Plus 组件
+//     }),
+//   ],
+//   base: '/web_dfsc222/',  // 部署的基础路径
+//   build: {
+//     rollupOptions: {
+//       output: {
+//         // 配置生成的代码块文件名
+//         chunkFileNames: 'assets/[name]-[hash].js',
+//         // 配置生成的静态资源文件名
+//         assetFileNames: 'assets/[name]-[hash][extname]',
+//         // 避免文件名中包含中文字符
+//         sanitizeFileName: (name) => name.replace(/[\u4e00-\u9fa5]/g, ''),
+//       },
+//     },
+//   },
+//   resolve: {
+//     alias: {
+//       '@': fileURLToPath(new URL('./src', import.meta.url)),  // 设置别名，方便导入
+//     },
+//   },
+// });
+
+// import { fileURLToPath, URL } from 'node:url';
+// import { defineConfig } from 'vite';
+// import vue from '@vitejs/plugin-vue';
+// import vueDevTools from 'vite-plugin-vue-devtools';
+// import AutoImport from 'unplugin-auto-import/vite';
+// import Components from 'unplugin-vue-components/vite';
+// import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
+
+// export default defineConfig({
+//   plugins: [
+//     vue(),
+//     vueDevTools(),
+//     AutoImport({
+//       resolvers: [ElementPlusResolver()],
+//     }),
+//     Components({
+//       resolvers: [ElementPlusResolver()],
+//     }),
+//   ],
+//   base: '/web_dfsc222/',
+//   build: {
+//     rollupOptions: {
+//       output: {
+//         chunkFileNames: 'assets/[name]-[hash].js',
+//         assetFileNames: 'assets/[name]-[hash][extname]',
+//         sanitizeFileName: (name) => name.replace(/[\u4e00-\u9fa5]/g, '').replace(/\x00/g, ''),
+//       },
+//     },
+//   },
+//   resolve: {
+//     alias: {
+//       '@': fileURLToPath(new URL('./src', import.meta.url)),
+//     },
+//   },
+// });
+
+
 import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'  // 关键点：确保这一行存在
+import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 export default defineConfig({
+  server: {
+    open: true,
+    // 可选的代理配置
+    proxy: {
+      '/api': {
+        target: 'http://your-api-server.com',
+        changeOrigin: true,
+      }
+    }
+  },
   plugins: [
-    vue(),  // 确保这里调用了 vue() 插件
+    vue(),
     vueDevTools(),
     AutoImport({
+      imports: ['vue', 'vue-router'],
       resolvers: [ElementPlusResolver()],
     }),
     Components({
       resolvers: [ElementPlusResolver()],
     }),
   ],
-  // base: process.env.NODE_ENV === 'production' ? '/web_dfsc222/' : '/',
+  // 动态设置 base，生产环境用 /web_dfsc222/，开发环境用 /
   base: './',
   resolve: {
     alias: {
