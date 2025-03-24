@@ -90,8 +90,8 @@ export default defineConfig({
       resolvers: [ElementPlusResolver()],
     }),
   ],
-  // base: process.env.NODE_ENV === 'production' ? '/DFSC/' : '/',
-  base: './',
+  base: process.env.NODE_ENV === 'production' ? '/web_dfsc222/' : '/',
+  // base: './',
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
