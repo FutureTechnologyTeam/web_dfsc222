@@ -21,7 +21,8 @@ export default defineConfig({
       resolvers: [ElementPlusResolver()],
     }),
   ],
-  base: process.env.NODE_ENV === 'production' ? '/DFSC/' : '/',
+  // base: process.env.NODE_ENV === 'production' ? '/DFSC/' : '/',
+  base:'./',
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
