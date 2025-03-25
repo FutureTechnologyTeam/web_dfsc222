@@ -187,40 +187,80 @@
 
 
 import { fileURLToPath, URL } from 'node:url'
-import { defineConfig } from 'vite'
+// import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
-export default defineConfig({
-  server: {
-    open: true,
-    // 可选的代理配置
-    proxy: {
-      '/api': {
-        target: 'http://your-api-server.com',
-        changeOrigin: true,
+// export default defineConfig({
+//   server: {
+//     open: true,
+//     // 可选的代理配置
+//     proxy: {
+//       '/api': {
+//         target: 'http://your-api-server.com',
+//         changeOrigin: true,
+//       }
+//     }
+//   },
+//   plugins: [
+//     vue(),
+//     vueDevTools(),
+//     AutoImport({
+//       imports: ['vue', 'vue-router'],
+//       resolvers: [ElementPlusResolver()],
+//     }),
+//     Components({
+//       resolvers: [ElementPlusResolver()],
+//     }),
+//   ],
+//   // 动态设置 base，生产环境用 /web_dfsc222/，开发环境用 /
+//   // base: './',
+//   base: process.env.NODE_ENV === 'production' ? '/web_dfsc222/' : '/',
+//   resolve: {
+//     alias: {
+//       '@': fileURLToPath(new URL('./src', import.meta.url))
+//     }
+//   }
+// })
+
+
+
+import { defineConfig, loadEnv } from 'vite';
+
+export default defineConfig(({ mode }) => {
+  // 加载环境变量（支持 .env 文件）
+  const env = loadEnv(mode, process.cwd(), 'VITE_');
+  
+  return {
+    server: {
+      open: true,
+      proxy: {
+        '/api': {
+          target: 'http://your-api-server.com',
+          changeOrigin: true,
+        }
+      }
+    },
+    plugins: [
+      vue(),
+      vueDevTools(),
+      AutoImport({
+        imports: ['vue', 'vue-router'],
+        resolvers: [ElementPlusResolver()],
+      }),
+      Components({
+        resolvers: [ElementPlusResolver()],
+      }),
+    ],
+    // 优先级：环境变量 > 默认值
+    base: env.VITE_BASE_URL || (mode === 'production' ? '/web_dfsc222/' : '/'),
+    resolve: {
+      alias: {
+        '@': fileURLToPath(new URL('./src', import.meta.url))
       }
     }
-  },
-  plugins: [
-    vue(),
-    vueDevTools(),
-    AutoImport({
-      imports: ['vue', 'vue-router'],
-      resolvers: [ElementPlusResolver()],
-    }),
-    Components({
-      resolvers: [ElementPlusResolver()],
-    }),
-  ],
-  // 动态设置 base，生产环境用 /web_dfsc222/，开发环境用 /
-  base: './',
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
-    }
-  }
-})
+  };
+});
